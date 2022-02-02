@@ -1,0 +1,55 @@
+@page
+@using Courier.Models
+@using Microsoft.Extensions.Options
+@inject IOptions<AuthenticationOptions> _authenticationSettings
+@model Courier.Pages.Register
+@{
+    Layout = "Shared/_AuthLayout";
+    ViewData["Title"] = "Register";
+}
+
+<body class="antialiased border-top-wide border-primary d-flex flex-column">
+<div class="page page-center">
+    <div class="container-tight py-4">
+        <div class="text-center mb-4">
+            <a href=".">
+                <img src="~/assets/logo.svg" height="36" alt="">
+            </a>
+        </div>
+        <form class="card card-md" method="post">
+            <div class="card-body">
+                @if (_authenticationSettings.Value.AllowSignUp)
+                {
+                    <h2 class="card-title text-center mb-4">Create new account</h2>
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="mb-3">
+                        <label asp-for="Input.UserName" class="form-label"></label>
+                        <input asp-for="Input.UserName" type="text" class="form-control" placeholder="Enter username">
+                        <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Input.Email" class="form-label"></label>
+                        <input asp-for="Input.Email" type="email" class="form-control" placeholder="Enter email">
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Input.Password" class="form-label">Password</label>
+                        <input asp-for="Input.Password" type="password" class="form-control" placeholder="Password">
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-footer">
+                        <button type="submit" class="btn btn-primary w-100">Create new account</button>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger">Signing up is disabled for this instance of Courier.</div>
+                }
+            </div>
+        </form>
+        <div class="text-center text-muted mt-3">
+            Already have account? <a asp-page="Login" tabindex="-1">Sign in</a>
+        </div>
+    </div>
+</div>
+</body>

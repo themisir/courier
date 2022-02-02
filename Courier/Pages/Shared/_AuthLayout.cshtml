@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>@ViewData["Title"] - Courier - Private Package Manager for Dart and Flutter</title>
+    <link href="~/assets/favicon.png" rel="icon" />
+    <!-- CSS files -->
+    <link href="~/assets/css/tabler.min.css" rel="stylesheet"/>
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+@RenderBody()
+<script src="~/assets/js/tabler.min.js"></script>
+<script src="~/assets/js/app.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</html>

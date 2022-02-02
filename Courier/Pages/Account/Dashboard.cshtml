@@ -1,0 +1,117 @@
+@page
+@model Courier.Pages.Account.Dashboard
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["Navigation"] = "Account";
+}
+
+@section PageTitle {
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <div class="page-pretitle">
+                    Account
+                </div>
+                <h2 class="page-title">
+                    Packages
+                </h2>
+            </div>
+            @if (Model.Packages.Count > 0)
+            {
+                <div class="col-auto ms-auto">
+                    <div class="btn-list">
+                        <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-publishing">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cloud-upload" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                               <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                               <path d="M7 18a4.6 4.4 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1"></path>
+                               <polyline points="9 15 12 12 15 15"></polyline>
+                               <line x1="12" y1="12" x2="12" y2="21"></line>
+                            </svg>
+                            Upload package
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<div class="card">
+    <div class="card-header row">
+        <h3 class="card-title col">Packages</h3>
+    </div>
+    <ul class="list-group list-group-flush">
+        @foreach (var package in Model.Packages)
+        {
+            <a href="/Packages/@package.Name" class="list-group-item">
+                <div class="d-flex w-100 justify-content-between">
+                    <h4>@package.Name</h4>
+                    <small class="badge bg-primary">@package.LatestVersion?.VersionName</small>
+                </div>
+                @{
+                    var description = package.LatestVersion?.Metadata.GetValueOrDefault("description") ?? "Description is not provided";
+                    <span class="text-muted">@description</span>
+                }
+            </a>
+        }
+
+        @if (Model.Packages.Count == 0)
+        {
+            <div class="empty">
+                <div class="empty-img">
+                    <img src="~/assets/img/undraw_my_documents_re_13dc.svg" height="128" alt="My documents illustration">
+                </div>
+                <p class="empty-title">Packages are managed from here</p>
+                <p class="empty-subtitle text-muted">
+                    You have not published any package. After publishing your first package, it'll appear here.
+                </p>
+                <div class="empty-action">
+                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-publishing">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cloud-upload" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                           <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                           <path d="M7 18a4.6 4.4 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1"></path>
+                           <polyline points="9 15 12 12 15 15"></polyline>
+                           <line x1="12" y1="12" x2="12" y2="21"></line>
+                        </svg>
+                        Upload package
+                    </a>
+                </div>
+            </div>
+        }
+    </ul>
+</div>
+
+<div class="modal modal-blur fade" id="modal-publishing">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Publishing packages</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Packages could be uploaded using <b>pub</b> command line interface. You can upload packages by following these instructions.</p>
+                <ol>
+                    <li>
+                        Create a <a asp-page="./PersonalTokens" target="_blank">personal token</a>.
+                    </li>
+                    <li>
+                        <div class="mb-3">Sign in to pub cli using generated token on previous step.</div>
+                        <pre><code class="language-shell">flutter pub token add <i>https://example.com</i></code></pre>
+                    </li>
+                    <li>
+                        <div class="mb-3">Paste your personal token created on 1st step to the terminal.</div>
+                    </li>
+                    <li>
+                        <div class="mb-3">Provide package registry in <b>pubspec.yaml</b> file.</div>
+                        <pre><code class="language-yaml">name: awesome_package
+publish_to: <i>https://example.com</i></code></pre>
+                    </li>
+                    <li>Publish using pub cli by running <code>flutter pub publish</code>.</li>
+                </ol>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

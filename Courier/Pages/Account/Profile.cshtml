@@ -1,0 +1,67 @@
+@page
+@using Courier.Helpers
+@model Courier.Pages.Account.Profile
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["Navigation"] = "Account";
+}
+
+@section PageTitle {
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <div class="page-pretitle">
+                    Account
+                </div>
+                <h2 class="page-title">
+                    Profile
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row row-cards">
+    <div class="col-md-9">
+        <form method="post" class="card mb-3">
+            <div class="card-header">
+                <h3 class="card-title">Update profile details</h3>
+            </div>
+            <div class="card-body">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="mb-3">
+                    <label asp-for="Input.UserName" class="form-label"></label>
+                    <input asp-for="Input.UserName" type="text" class="form-control" placeholder="Enter username">
+                    <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Input.Email" class="form-label"></label>
+                    <input asp-for="Input.Email" type="email" class="form-control" placeholder="Enter email">
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Input.FullName" class="form-label"></label>
+                    <input asp-for="Input.FullName" type="text" class="form-control" placeholder="Enter display name">
+                    <span asp-validation-for="Input.FullName" class="text-danger"></span>
+                </div>
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary w-100">Save changes</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card mb-3">
+            <div class="card-body p-4 text-center">
+                <span class="avatar avatar-xl mb-3 avatar-rounded" style="background-image: url('@GravatarHelper.GenerateAvatar(Model.CurrentUser.Email)')"></span>
+                <h3 class="m-0 mb-1">@Model.CurrentUser.PrimaryName</h3>
+                @if (Model.CurrentUser.SecondaryName is not null)
+                {
+                    <div class="text-muted">@Model.CurrentUser.SecondaryName</div>
+                }
+                <div class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>@ViewData["Title"] - Courier - Private Package Manager for Dart and Flutter</title>
+    <link href="~/assets/favicon.png" rel="icon" />
+    <!-- CSS files -->
+    <link href="~/assets/css/tabler.min.css" rel="stylesheet"/>
+    <link href="~/assets/css/custom.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="~/assets/libs/highlight/styles/github-gist.css" media="print" onload="this.media='all'"/>
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="antialiased">
+<div class="wrapper">
+    <header class="navbar navbar-expand-md navbar-light d-print-none">
+        <div class="container-xl">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                <a href="/">
+                    <img src="~/assets/logo.svg" width="110" height="32" alt="Package Server" class="navbar-brand-image">
+                </a>
+            </h1>
+            <div class="navbar-nav flex-row order-md-last">
+                <partial name="_ProfileMenu"/>
+            </div>
+        </div>
+    </header>
+
+    <partial name="_Nav"/>
+
+    <div class="page-wrapper">
+        <div class="container-xl">
+            @await RenderSectionAsync("PageTitle", required: false)
+        </div>
+        <div class="page-body">
+            <div class="container-xl">
+                @RenderBody()
+            </div>
+        </div>
+        <partial name="_Footer"/>
+    </div>
+</div>
+<script src="~/assets/js/tabler.min.js"></script>
+<script src="~/assets/libs/highlight/highlight.pack.js"></script>
+<script src="~/assets/js/app.js"></script>
+<script>hljs.highlightAll();</script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

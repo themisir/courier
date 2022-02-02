@@ -1,0 +1,192 @@
+@page "/Packages/{packageName}/Members"
+@using Courier.Helpers
+@model Courier.Pages.SinglePackage.Members
+@{
+    ViewData["Title"] = "Members";
+    ViewData["Navigation"] = "Package";
+}
+
+@section PageTitle {
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <div class="page-pretitle">
+                    Packages
+                </div>
+                <h2 class="page-title">
+                    @Model.PackageName
+                </h2>
+            </div>
+            @if (Model.Package.OwnerId == Model.UserId)
+            {
+                <div class="col-auto ms-auto">
+                    <div class="btn-list">
+                        <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-create">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Invite user
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@if (Model.Package.OwnerId == Model.UserId)
+{
+    <form method="post"
+          asp-page-handler="AddPackageUser"
+          asp-route-packageName="@Model.PackageName"
+          asp-route-packageId="@Model.Package.Id">
+        <div class="modal modal-blur fade" id="modal-create">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Invite a new user</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label asp-for="Input.UserName"></label>
+                            <input asp-for="Input.UserName" class="form-control" autocomplete="off" required/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-check">
+                                <input asp-for="Input.CanWrite" type="checkbox" class="form-check-input"/>
+                                <span class="form-check-label">Has write access</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Members</h3>
+    </div>
+    <div class="list-group list-group-flush">
+        <div class="list-group-item">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <a href="#">
+                        <span class="avatar" style="background-image: url('@GravatarHelper.GenerateAvatar(Model.Package.Owner!.Email)')"></span>
+                    </a>
+                </div>
+                <div class="col text-truncate">
+                    <a href="#" class="text-body d-block">
+                        @Model.Package.Owner!.PrimaryName
+                        <span class="badge bg-green">Owner</span>
+                    </a>
+                    @if (Model.Package.Owner!.SecondaryName is not null)
+                    {
+                        <small class="d-block text-muted text-truncate mt-n1">@Model.Package.Owner.SecondaryName</small>
+                    }
+                </div>
+            </div>
+        </div>
+
+        @foreach (var packageUser in Model.Users)
+        {
+            <div class="list-group-item @Html.Raw(packageUser.Id == Model.AddedPackageUserId ? "active" : "")">
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        <a href="#">
+                            <span class="avatar" style="background-image: url('@GravatarHelper.GenerateAvatar(packageUser.User!.Email)')"></span>
+                        </a>
+                    </div>
+                    <div class="col text-truncate">
+                        @if (packageUser.Id == Model.AddedPackageUserId)
+                        {
+                            <a href="#" class="text-white d-block">@packageUser.User.PrimaryName</a>
+                            if (packageUser.User.SecondaryName is not null)
+                            {
+                                <small class="d-block text-truncate mt-n1">@packageUser.User.SecondaryName</small>
+                            }
+                        }
+                        else
+                        {
+                            <a href="#" class="text-body d-block">@packageUser.User.PrimaryName</a>
+                            if (packageUser.User.SecondaryName is not null)
+                            {
+                                <small class="d-block text-muted text-truncate mt-n1">@packageUser.User.SecondaryName</small>
+                            }
+                        }
+                    </div>
+
+                    @if (Model.Package.OwnerId == Model.UserId)
+                    {
+                        var packageUserCanWrite = !packageUser.CanUpload;
+                        var btnClass = packageUser.CanUpload ? "btn-success" : null;
+
+                        <div class="col-auto">
+                            <form method="post"
+                                  asp-page-handler="UpdatePackageUserCanWrite"
+                                  asp-route-packageName="@Model.PackageName"
+                                  asp-route-packageId="@Model.Package.Id"
+                                  asp-route-packageUserId="@packageUser.Id"
+                                  asp-route-packageUserCanWrite="@packageUserCanWrite">
+                                <button type="submit" class="btn @btnClass">
+                                    @if (packageUser.CanUpload)
+                                    {
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+                                            <path d="M9 12l2 2l4 -4"></path>
+                                        </svg>
+                                    }
+                                    else
+                                    {
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+                                        </svg>
+                                    }
+                                    Uploader
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-auto">
+                            <form method="post"
+                                  asp-page-handler="RemovePackageUser"
+                                  asp-route-packageName="@Model.PackageName"
+                                  asp-route-packageId="@Model.Package.Id"
+                                  asp-route-packageUserId="@packageUser.Id"
+                                  data-confirm-before-submit="Are you sure you want to continue?">
+                                <button type="submit" class="btn btn-danger">
+                                    Remove user
+                                </button>
+                            </form>
+                        </div>
+                    }
+                    else if (packageUser.UserId == Model.UserId)
+                    {
+                        <div class="col-auto">
+                            <form method="post"
+                                  asp-page-handler="RemovePackageUser"
+                                  asp-route-packageName="@Model.PackageName"
+                                  asp-route-packageId="@Model.Package.Id"
+                                  asp-route-packageUserId="@packageUser.Id"
+                                  data-confirm-before-submit="Are you sure you want to continue?">
+                                <button type="submit" class="btn btn-danger">
+                                    Remove user
+                                </button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>

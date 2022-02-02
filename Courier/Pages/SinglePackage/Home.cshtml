@@ -1,0 +1,144 @@
+@page "/Packages/{packageName}"
+@using System.Text.Json
+@using Courier.Services
+@model Courier.Pages.SinglePackage.Home
+@inject IMarkdownRenderer _markdownRenderer
+@{
+    ViewData["Title"] = Model.PackageName;
+    ViewData["Navigation"] = "Package";
+
+    var pubspec = Model.Package.LatestVersion?.Metadata;
+}
+
+@section PageTitle {
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <div class="page-pretitle">
+                    Packages
+                </div>
+                <h2 class="page-title">
+                    @Model.PackageName
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row row-cards">
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Readme</h3>
+            </div>
+            <div class="card-body">
+                @if (Model.Package.LatestVersion is null)
+                {
+                    <div class="card-header">
+                        <h3 class="card-title text-warning">Unpublished</h3>
+                    </div>
+                    <div class="alert alert-warning">
+                        Package does not have a published version.
+                    </div>
+                }
+                else
+                {
+                    if (Model.Package.LatestVersion.ReadmeContents is not null)
+                    {
+                        @Html.Raw(await _markdownRenderer.ToHtmlAsync(Model.Package.LatestVersion.ReadmeContents))
+                    }
+                    else
+                    {
+                        <div class="card-header">
+                            <h3 class="card-title">Readme</h3>
+                        </div>
+                        <div class="alert alert-warning">
+                            Package does not contains README file.
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card mb-3">
+            <div class="card-header">
+                <h3 class="card-title">Metadata</h3>
+            </div>
+            <div class="card-body">
+                @{
+                    var description = pubspec?.GetValueOrDefault("description");
+                    var repository = pubspec?.GetValueOrDefault("repository") ??
+                                     pubspec?.GetValueOrDefault("homepage");
+
+                    if (description is not null)
+                    {
+                        <div class="text-muted mb-3">@description</div>
+                    }
+                    else
+                    {
+                        <div class="text-warning mb-3">No description is provided</div>
+                    }
+                    if (repository is not null)
+                    {
+                        <a href="@repository" target="_blank" rel="noopener nofollow">Repository</a>
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header">
+                <h3 class="card-title">Dependencies</h3>
+            </div>
+            <div class="card-body">
+                @{
+                    var allDependencies = new HashSet<string>();
+                    if (pubspec?.GetValueOrDefault("dependencies") is JsonElement dependencies)
+                    {
+                        foreach (var element in dependencies.EnumerateObject())
+                        {
+                            allDependencies.Add(element.Name);
+                        }
+                    }
+                    if (pubspec?.GetValueOrDefault("dev_dependencies") is JsonElement devDependencies)
+                    {
+                        foreach (var element in devDependencies.EnumerateObject())
+                        {
+                            allDependencies.Add(element.Name);
+                        }
+                    }
+
+                    foreach (var dependency in allDependencies.OrderByDescending(d => d))
+                    {
+                        <a href="https://pub.dev/packages/@dependency" target="_blank" rel="noopener nofollow">@dependency</a>
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Versions</h3>
+            </div>
+
+            <div class="list-group list-group-flush">
+                @{
+                    var latestVersion = true;
+                    foreach (var version in Model.Package.Versions!)
+                    {
+                        <div class="list-group-item d-flex flex-row">
+                            <a href="#">@version.VersionName</a>
+                            @if (latestVersion)
+                            {
+                                <span class="ms-auto badge bg-green">Latest</span>
+                                latestVersion = false;
+                            }
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Courier", "Courier\Courier.csproj", "{FADBDF38-F136-4B92-B34A-08F9E79FBC1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Courier.SqliteMigrations", "Courier.SqliteMigrations\Courier.SqliteMigrations.csproj", "{D11F4F33-405F-46D1-8FAC-115C59C119F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Courier.PostgresMigrations", "Courier.PostgresMigrations\Courier.PostgresMigrations.csproj", "{AA44433B-2C93-4CCA-84E8-159917439664}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FADBDF38-F136-4B92-B34A-08F9E79FBC1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FADBDF38-F136-4B92-B34A-08F9E79FBC1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FADBDF38-F136-4B92-B34A-08F9E79FBC1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FADBDF38-F136-4B92-B34A-08F9E79FBC1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D11F4F33-405F-46D1-8FAC-115C59C119F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D11F4F33-405F-46D1-8FAC-115C59C119F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D11F4F33-405F-46D1-8FAC-115C59C119F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D11F4F33-405F-46D1-8FAC-115C59C119F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA44433B-2C93-4CCA-84E8-159917439664}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA44433B-2C93-4CCA-84E8-159917439664}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA44433B-2C93-4CCA-84E8-159917439664}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA44433B-2C93-4CCA-84E8-159917439664}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

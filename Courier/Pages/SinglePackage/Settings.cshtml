@@ -1,0 +1,31 @@
+@page "/Packages/{packageName}/Settings"
+@model Courier.Pages.SinglePackage.Settings
+@{
+    ViewData["Title"] = Model.PackageName;
+    ViewData["Navigation"] = "Package";
+}
+
+@section PageTitle {
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <div class="page-pretitle">
+                    Packages
+                </div>
+                <h2 class="page-title">
+                    @Model.PackageName
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.Package.OwnerId != Model.UserId)
+{
+    <div class="alert alert-danger">Only package owners are allowed to change settings.</div>
+}
+
+<div class="alert alert-warning">
+    <div class="mb-2">This page has not been completed.</div>
+    <i>TODO: Add some stuff here</i>
+</div>

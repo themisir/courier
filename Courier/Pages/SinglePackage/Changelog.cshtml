@@ -1,0 +1,39 @@
+@page "/Packages/{packageName}/Changelog"
+@using Courier.Services
+@model Courier.Pages.SinglePackage.Changelog
+@inject IMarkdownRenderer _markdownRenderer
+@{
+    ViewData["Title"] = Model.PackageName;
+    ViewData["Navigation"] = "Package";
+}
+
+@section PageTitle {
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <div class="page-pretitle">
+                    Packages
+                </div>
+                <h2 class="page-title">
+                    @Model.PackageName
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Changelog</h3>
+    </div>
+    <div class="card-body">
+        @if (Model.Package.LatestVersion?.ChangelogContents is not null)
+        {
+            @Html.Raw(await _markdownRenderer.ToHtmlAsync(Model.Package.LatestVersion.ChangelogContents))
+        }
+        else
+        {
+            <div class="text-warning">This package does not contains CHANGELOG file</div>
+        }
+    </div>
+</div>

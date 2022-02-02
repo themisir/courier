@@ -1,0 +1,57 @@
+@page
+@model Courier.Pages.Login
+@using Courier.Models
+@using Microsoft.Extensions.Options
+@inject IOptions<AuthenticationOptions> _authenticationSettings
+@{
+    Layout = "Shared/_AuthLayout";
+    ViewData["Title"] = "Login";
+}
+
+<body class="antialiased border-top-wide border-primary d-flex flex-column">
+<div class="page page-center">
+    <div class="container-tight py-4">
+        <div class="text-center mb-4">
+            <a href=".">
+                <img src="~/assets/logo.svg" height="36" alt="">
+            </a>
+        </div>
+        <form class="card card-md" method="post">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Login to your account</h2>
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="mb-3">
+                    <label asp-for="Input.UserName" class="form-label"></label>
+                    <input asp-for="Input.UserName" class="form-control" placeholder="Username" required />
+                    <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label">
+                        <label asp-for="Input.Password"></label>
+                        <span class="form-label-description">
+                            <a asp-page="./ForgotPassword">I forgot password</a>
+                        </span>
+                    </label>
+                    <input asp-for="Input.Password" class="form-control" placeholder="Password" required />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="mb-2">
+                    <label class="form-check">
+                        <input asp-for="Input.RememberMe" type="checkbox" class="form-check-input"/>
+                        <span class="form-check-label">Remember me on this device</span>
+                    </label>
+                </div>
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary w-100">Sign in</button>
+                </div>
+            </div>
+        </form>
+        @if (_authenticationSettings.Value.AllowSignUp)
+        {
+            <div class="text-center text-muted mt-3">
+                Don't have account yet? <a asp-page="Register" tabindex="-1">Sign up</a>
+            </div>
+        }
+    </div>
+</div>
+</body>
