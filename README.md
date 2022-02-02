@@ -19,9 +19,8 @@
 
 Pull official Courier image from GitHub Container registry and run it inside docker or any OCI supported container runtime.
 
-```
-// TODO: write docker pull command
-// TODO: write docker run command
+```sh
+docker pull ghcr.io/themisir/courier:main
 ```
 
 ### Standalone
